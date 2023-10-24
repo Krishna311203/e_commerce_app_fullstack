@@ -46,4 +46,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-/server/mode_modules
+/server/node_modules
