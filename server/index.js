@@ -12,12 +12,14 @@ const ip = '0.0.0.0';
 const app = express();
 const DB = "mongodb+srv://tonystark:iamironman@cluster0.hosi4vb.mongodb.net/"
 
-mongoose.connect(DB).then(() =>{
+mongoose.connect(DB,{
+  dbName: 'plant-appdata'
+}).then(() =>{
   console.log("connected to the database");
 }).catch(e =>{
   console.error("could not connect", e);
 })
-
+app.use(express.json())
 app.use(authRouter)
 
 app.listen(port, ip, () => {

@@ -1,10 +1,9 @@
 const express  = require('express')
-// const bcrypt = require('bcrypt')
-// const mongoose = require('mongoose')
-// const jwt = require('jsonwebtoken')
-const User = require('../models/user')
+const bcrypt = require('bcrypt')
 
+const User = require('../models/user')
 const authRouter = express.Router()
+
 
 authRouter.post('/api/signup', async (req, res) => {
     try {
@@ -13,15 +12,15 @@ authRouter.post('/api/signup', async (req, res) => {
         // Check if user already exists
         const existingUser = await User.findOne({ email })
         if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' })
+            return res.status(400).json({ message: 'User with this email already exists!  ' })
         }
 
         // Hash password
-        const salt = await bcrypt.genSalt()
-        const hashedPassword = await bcrypt.hash(password, salt)
+        
+        const hashedPassword = await bcrypt.hash(password, 8)
 
         // Create new user
-        const newUser = new User({
+        let newUser = new User({
             email,
             password: hashedPassword,
             fullName
@@ -31,13 +30,13 @@ authRouter.post('/api/signup', async (req, res) => {
         await newUser.save()
 
         // Create and sign JWT token
-        const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET)
+        // const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET)
 
         // Return token and user data
-        res.status(201).json({ token, user: { id: newUser._id, email: newUser.email, fullName: newUser.fullName } })
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({ message: 'Server error' })
+        res.status(201).json({  user: newUser })
+    } catch (e) {
+        console.error(e)
+        res.status(500).json({ error: e.message })
     }
 })
 
@@ -48,4 +47,3 @@ authRouter.get('/user', (req, res) => {
 module.exports = authRouter
 
 
-module.exports = authRouter
