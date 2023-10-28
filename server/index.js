@@ -4,13 +4,14 @@ const  mongoose  = require('mongoose');
 
 // project imports
 const authRouter = require('./routes/auth');
-
+require('dotenv').config();
 
 // inits
 const port = 3000;
 const ip = '0.0.0.0';
 const app = express();
-const DB = "mongodb+srv://tonystark:iamironman@cluster0.hosi4vb.mongodb.net/"
+// const url = .
+const DB = process.env.MONGO_URL
 
 mongoose.connect(DB,{
   dbName: 'plant-appdata'

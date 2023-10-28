@@ -1,4 +1,5 @@
 import 'package:e_commerce_app_fullstack/Features/Auth/Screens/LoginScreen.dart';
+import 'package:e_commerce_app_fullstack/Features/Auth/Services/auth_service.dart';
 import 'package:e_commerce_app_fullstack/Features/Landing/landing.dart';
 import 'package:e_commerce_app_fullstack/helperFunctions.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _cpasswordController = TextEditingController();
-
+  final AuthService authService = AuthService();
   @override
   void dispose() {
     super.dispose();
@@ -97,6 +98,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             SizedBox(height: size.height * 0.05),
                             TextFormField(
                               controller: _nameController,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return "Please enter your name";
+                                }
+                                return null;
+                              },
                               decoration: textInputDecoration.copyWith(
                                 hintText: "Full Name",
                                 label: const Text("Name"),
@@ -107,6 +114,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             SizedBox(height: size.height * 0.02),
                             TextFormField(
                               controller: _emailController,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return "Please enter your email";
+                                }
+                                return null;
+                              },
                               decoration: textInputDecoration.copyWith(
                                 hintText: "Email Address",
                                 label: const Text("Email"),
@@ -117,6 +130,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             SizedBox(height: size.height * 0.02),
                             TextFormField(
                               controller: _passwordController,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return "Please enter your password";
+                                }
+                                return null;
+                              },
                               decoration: textInputDecoration.copyWith(
                                 hintText: "Password",
                                 label: const Text("Password"),
@@ -127,6 +146,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             SizedBox(height: size.height * 0.02),
                             TextFormField(
                               controller: _cpasswordController,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return "Please enter your password";
+                                }
+                                return null;
+                              },
                               decoration: textInputDecoration.copyWith(
                                 hintText: "Enter Password",
                                 label: const Text("Confirm Password"),
@@ -140,7 +165,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               height: size.width * 0.13,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  nextScreenReplace(context, const Landing());
+                                  if (_formKey.currentState!.validate()) {
+                                    signUpUser();
+                                  }
+
+                                  // nextScreenReplace(context, const Landing());
                                 },
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
@@ -195,5 +224,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
         )
       ],
     );
+  }
+
+  void signUpUser() {
+    if (_formKey.currentState!.validate()) {
+      authService.signup(
+        context: context,
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+        fullName: _nameController.text.trim(),
+      );
+    }
   }
 }

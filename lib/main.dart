@@ -1,8 +1,10 @@
 import 'package:e_commerce_app_fullstack/Features/Landing/landing.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: "lib/.env_flutter");
   runApp(const MyApp());
 }
 

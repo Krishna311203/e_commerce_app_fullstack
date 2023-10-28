@@ -24,7 +24,7 @@ var textInputDecoration = InputDecoration(
   labelStyle: const TextStyle(
       color: Color.fromARGB(163, 232, 230, 230)), // Add enabled border
 );
-void showsnackbar({context, color, message}) {
+void showsnackbar(context, color, message) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(message),
     backgroundColor: color,
