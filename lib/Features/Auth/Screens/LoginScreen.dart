@@ -4,6 +4,8 @@ import 'package:e_commerce_app_fullstack/commonWidgets.dart';
 import 'package:e_commerce_app_fullstack/helperFunctions.dart';
 import 'package:flutter/material.dart';
 
+import '../Services/auth_service.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -15,7 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  final AuthService authService = AuthService();
   @override
   void dispose() {
     super.dispose();
@@ -94,6 +96,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             SizedBox(height: size.height * 0.07),
                             TextFormField(
                               controller: _emailController,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return "Please enter your name";
+                                }
+                                return null;
+                              },
                               decoration: textInputDecoration.copyWith(
                                 hintText: "Email Address",
                                 label: const Text("Email"),
@@ -106,6 +114,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             SizedBox(height: size.height * 0.03),
                             TextFormField(
                               controller: _passwordController,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return "Please enter your name";
+                                }
+                                return null;
+                              },
                               decoration: textInputDecoration.copyWith(
                                 hintText: "Password",
                                 label: const Text("Password"),
@@ -120,7 +134,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               width: size.width * 0.7,
                               height: size.width * 0.13,
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    signInUser();
+                                  }
+                                },
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
@@ -174,5 +192,15 @@ class _LoginScreenState extends State<LoginScreen> {
         )
       ],
     );
+  }
+
+  void signInUser() {
+    if (_formKey.currentState!.validate()) {
+      authService.signin(
+        context: context,
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+    }
   }
 }

@@ -11,7 +11,7 @@ void httpErrorHandle({
   required VoidCallback onSuccess,
 }) {
   switch (response.statusCode) {
-    case 201:
+    case 200:
       onSuccess();
       break;
     case 400:
@@ -21,6 +21,5 @@ void httpErrorHandle({
       showsnackbar(context, Colors.red, jsonDecode(response.body)['error']);
       break;
     default:
-      
   }
 }
